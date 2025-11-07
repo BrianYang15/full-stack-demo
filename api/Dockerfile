@@ -1,7 +1,7 @@
 FROM python:3.10-bullseye
 
 RUN mkdir /app
-COPY ./app/requirements.txt /app
+COPY ./app/. /app/.
 WORKDIR /app
 
 RUN apt-get -y update && \
