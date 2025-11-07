@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  
+  api:
+    # restart: unless-stopped # on-failure:0, unless-stopped, always
+    restart: always # on-failure:0, unless-stopped, always
+    image: api:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      bash -c './run.sh'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"   # 單個日誌文件的最大大小
+        max-file: "10"     # 保留的日誌文件數量
+    volumes:
+      - ./app:/app
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
