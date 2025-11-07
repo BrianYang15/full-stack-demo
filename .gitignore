@@ -1,0 +1,6 @@
+# Node dependencies
+node_modules/
+f/app/my-app/node_modules/
+
+# sqlite3 dependencies
+db.sqlite3
