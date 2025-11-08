@@ -7,9 +7,10 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import Document
-from .serializers import DocumentSerializer, UploadSerializer
+from .serializers import DocumentSerializer, UploadSerializer, ListQuerySerializer
 from .serializers import validate_file_size
 import mimetypes
+from .pagination import DefaultPagination   # ← 新增
 
 class DocumentListCreateAPIView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -17,12 +18,16 @@ class DocumentListCreateAPIView(APIView):
 
     @swagger_auto_schema(
         operation_summary="取得所有檔案列表",
+        query_serializer=ListQuerySerializer, 
         responses={200: DocumentSerializer(many=True)},
     )
     def get(self, request):
         docs = Document.objects.order_by("-uploaded_at")
-        serializer = DocumentSerializer(docs, many=True)
-        return Response(serializer.data)
+        paginator = DefaultPagination()
+        page_docs = paginator.paginate_queryset(docs, request, view=self)  # ← 分頁切片
+        serializer = DocumentSerializer(page_docs, many=True)
+        
+        return paginator.get_paginated_response(serializer.data)
     
     @swagger_auto_schema(
         operation_summary="上傳單一檔案（≤5MB）",
@@ -40,7 +45,6 @@ class DocumentListCreateAPIView(APIView):
         serializer = DocumentSerializer(doc)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
 class DocumentDetailAPIView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -57,7 +61,6 @@ class DocumentDetailAPIView(APIView):
             default_storage.delete(doc.file.name)
         doc.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class DocumentDownloadAPIView(APIView):
     permission_classes = [permissions.AllowAny]

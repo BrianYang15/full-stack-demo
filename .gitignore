@@ -10,3 +10,4 @@ api/app/db.sqlite3
 
 # media dependencies
 api/app/media/
+api/app/media/*

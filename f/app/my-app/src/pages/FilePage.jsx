@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL
+const MAX_SIZE_MB = 5;
+const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
 export default function FilePage() {
   const [token, setToken] = useState(""); // 可留空；需要 JWT 時填入
@@ -16,6 +18,20 @@ export default function FilePage() {
 
   const totalPages = Math.max(1, Math.ceil(count / pageSize));
   const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+
+  // 👇 新增這個：選檔時即檢查大小
+  const handleFileSelect = (e) => {
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+    if (selected.size > MAX_SIZE_BYTES) {
+      setMsg(`❌ 檔案太大（${(selected.size / 1024 / 1024).toFixed(2)} MB），請小於 ${MAX_SIZE_MB} MB`);
+      e.target.value = ""; // 清空 input
+      setFile(null);
+      return;
+    }
+    setMsg("");
+    setFile(selected);
+  };
 
   const fetchList = async (p = page, ps = pageSize) => {
     try {
@@ -145,7 +161,8 @@ export default function FilePage() {
       {/* Upload */}
       <div style={card}>
         <label style={{ display: "block", marginBottom: 8 }}>上傳單一檔案（≤5MB）</label>
-        <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+        {/* <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} /> */}
+        <input type="file" onChange={handleFileSelect} disabled={busy} />
         <button style={btn} onClick={upload} disabled={!file || busy}>上傳</button>
 
         {/* 進度條 */}

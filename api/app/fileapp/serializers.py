@@ -16,3 +16,7 @@ class DocumentSerializer(serializers.ModelSerializer):
 
 class UploadSerializer(serializers.Serializer):
     file = serializers.FileField(required=True)
+
+class ListQuerySerializer(serializers.Serializer):
+    page = serializers.IntegerField(required=False, min_value=1, default=1)
+    page_size = serializers.IntegerField(required=False, min_value=1, max_value=100, default=10)
