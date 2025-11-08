@@ -1,6 +1,6 @@
 // FilePage.jsx
 import React, { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const API_BASE = import.meta.env.VITE_API_BASE_URL
 const MAX_SIZE_MB = 5;
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
@@ -18,6 +18,16 @@ export default function FilePage() {
 
   const totalPages = Math.max(1, Math.ceil(count / pageSize));
   const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    // 清除 token
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token"); // 若你有用 refresh 也一併清掉
+    // 導回登入頁
+    navigate("/login", { replace: true });
+  }
 
   // 👇 新增這個：選檔時即檢查大小
   const handleFileSelect = (e) => {
@@ -144,6 +154,24 @@ export default function FilePage() {
 
   return (
     <div style={{ maxWidth: 720, margin: "40px auto", fontFamily: "ui-sans-serif" }}>
+      
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {/* <h2>📁 Files Page</h2> */}
+        <button
+          onClick={handleLogout}
+          style={{
+            backgroundColor: "#f44336",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            padding: "6px 12px",
+            cursor: "pointer",
+          }}
+        >
+          登出
+        </button>
+      </div>
+
       {/* <h2>Files（分頁 + 上傳進度條）</h2> */}
       <h2>Files</h2>
 
@@ -164,7 +192,7 @@ export default function FilePage() {
         {/* <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} /> */}
         <input type="file" onChange={handleFileSelect} disabled={busy} />
         <button style={btn} onClick={upload} disabled={!file || busy}>上傳</button>
-
+        
         {/* 進度條 */}
         {progress > 0 && (
           <div style={{ marginTop: 10 }}>
