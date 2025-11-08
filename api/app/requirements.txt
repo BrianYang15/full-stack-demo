@@ -1,3 +1,4 @@
 Django==5.2
 djangorestframework
 drf_yasg
+django-cors-headers

@@ -29,9 +29,14 @@ ALLOWED_HOSTS = [
     'full-stack-demo-1.onrender.com',
     'localhost',  # Keep this for local development if needed
     '127.0.0.1',  # Keep this for local development if needed
-    # Other allowed hosts can go here
+    '192.168.0.102', # develop vm
 ]
 
+# 允許的前端來源（開發用）
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  #Keep this for local development if needed
+    "http://127.0.0.1:5173",  #Keep this for local development if needed
+]
 
 # Application definition
 
@@ -42,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "corsheaders",
     "rest_framework",
     "drf_yasg",
     "fileapp"
@@ -51,6 +57,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # 👈 放在最前面 (至少在 CommonMiddleware 之前)
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,8 +139,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# add proxy for api docs to use https mode
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
-SECURE_SSL_REDIRECT = True          # 想要全站強制 https 就打開
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True          # 想要全站強制 https 就打開
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
