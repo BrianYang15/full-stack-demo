@@ -36,7 +36,8 @@ ALLOWED_HOSTS = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  #Keep this for local development if needed
     "http://127.0.0.1:5173",  #Keep this for local development if needed
-    "http://localhost:4173"
+    "http://localhost:4173",
+    "https://full-stack-demo-1sbv.onrender.com"
 ]
 
 # Application definition
