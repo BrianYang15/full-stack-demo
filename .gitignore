@@ -7,3 +7,6 @@ db.sqlite3
 api/app/db.sqlite3
 
 **/__pycache__/
+
+# media dependencies
+api/app/media/
