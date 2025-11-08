@@ -17,13 +17,19 @@ function App() {
     // </>
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        {/* <Route path="/login" element={<LoginPage />} />
         <Route
           path="/"
           element={
             <ProtectedRoute>
               <FilePage />
             </ProtectedRoute>
+          }
+        /> */}
+        <Route
+          path="/"
+          element={
+              <FilePage />
           }
         />
       </Routes>

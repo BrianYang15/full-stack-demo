@@ -20,7 +20,7 @@ export default function FilePage() {
   const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
 
   const navigate = useNavigate();
-
+  
   function handleLogout() {
     // 清除 token
     localStorage.removeItem("access_token");
@@ -155,8 +155,7 @@ export default function FilePage() {
   return (
     <div style={{ maxWidth: 720, margin: "40px auto", fontFamily: "ui-sans-serif" }}>
       
-      <div style={{ display: "flex", alignItems: "center" }}>
-        {/* <h2>📁 Files Page</h2> */}
+      {/* <div style={{ display: "flex", alignItems: "center" }}>
         <button
           onClick={handleLogout}
           style={{
@@ -170,7 +169,7 @@ export default function FilePage() {
         >
           登出
         </button>
-      </div>
+      </div> */}
 
       {/* <h2>Files（分頁 + 上傳進度條）</h2> */}
       <h2>Files</h2>

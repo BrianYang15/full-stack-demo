@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     'localhost',  # Keep this for local development if needed
     '127.0.0.1',  # Keep this for local development if needed
     '192.168.0.102', # develop vm
+    '192.168.8.166', # develop vm
 ]
 
 # 允許的前端來源（開發用）
